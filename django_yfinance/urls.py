@@ -16,12 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views  # Import views from the main project folder
+from . import views 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('currency/', include('currency.urls')),  # If you have a currency app
-    path('currency/<str:base>/<str:quote>/', include('currency.urls')),  # For the currency exchange rate
-    #path('load_data/', include('load_data.urls')),  # If you have a load_data app
-    path('', views.home, name='home'),  # Map the root URL to the home view
+    path('currency/', include('currency.urls')),  
+    #path('currency/<str:base>/<str:quote>/', include('currency.urls')), #?
+    path('', views.home, name='home'),  
 ]
