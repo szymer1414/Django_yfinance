@@ -17,11 +17,11 @@ def get_currencies(request):
 
 def get_currency_pairs(request, currency):
     #return HttpResponse("<h1>get_currency_pairs</h1>")
-    currency_pairs = ExchangeRate.objects.filter(
-    Q(currency_pair__pair_code__startswith=currency) | Q(currency_pair__pair_code__endswith=currency))
-    
+    '''
+    currency_pairs2 = ExchangeRate.objects.filter(
+        Q(currency_pair__pair_code__startswith=currency) |
+        Q(currency_pair__pair_code__endswith=currency))
     related_currencies = set()
-    
     for pair in currency_pairs:
         base_currency = pair.currency_pair.pair_code[:3]
         quote_currency = pair.currency_pair.pair_code[3:]
@@ -30,7 +30,20 @@ def get_currency_pairs(request, currency):
             related_currencies.add(quote_currency)
         else:
             related_currencies.add(base_currency)
-        
+    '''
+    currency_pairs = ExchangeRate.objects.filter(
+        Q(currency_pair__base_currency__code=currency) |
+        Q(currency_pair__quote_currency__code=currency)
+    )
+    related_currencies = set()
+    
+    for rate in currency_pairs:
+        pair = rate.currency_pair
+        if pair.base_currency.code == currency:
+            related_currencies.add(pair.quote_currency.code)
+        else:
+            related_currencies.add(pair.base_currency.code)
+
     return JsonResponse({"related_currencies": list(related_currencies)})
 
 
