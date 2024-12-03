@@ -45,7 +45,7 @@ def get_currency_pairs(request, currency):
             related_currencies.add(pair.base_currency.code)
 
     return JsonResponse({"related_currencies": list(related_currencies)})
-
+    #return JsonResponse({"error": "related currencies not found"}, status=404)
 
 def get_exchange_rate(request, base, quote):
     #return HttpResponse("<h1>get_exchange_rat</h1>")
